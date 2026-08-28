@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-08-29
+
 ### Added(R2 数据互通与导出扩展)
 - **ASC 日志输入**:Vector/can-tools 兼容 ASCII 日志按内容识别(含 .log/.txt 改名文件),
   与 BLF 共用同一条索引/统计/解码/回放链路;实测 BLF↔ASC 往返帧数/解码值一致

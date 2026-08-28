@@ -3,7 +3,7 @@
 基于 **BLF 日志 + DBC 数据库** 的 CAN/CAN FD 总线离线分析工具,Python 原生桌面应用。
 由 Web 版(`blf-dbc-web`)迁移而来:**零浏览器、零部署、开箱即用**。
 
-当前版本 **v1.0.0**(首个正式版)· 变更历史见 [CHANGELOG.md](CHANGELOG.md);
+当前版本 **v2.0.0**· 变更历史见 [CHANGELOG.md](CHANGELOG.md);
 迁移方案与里程碑见 [PLAN.md](PLAN.md)。
 
 ## 功能
