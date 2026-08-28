@@ -7,3 +7,13 @@ build/
 dist/
 *.spec.bak
 tests/gui_smoke.png
+
+# Large data files
+data/*.blf
+data/*.BLF
+data/*.dbc
+data/*.xlsx
+
+# Binary files
+tests/*.png
+assets/*.ico
