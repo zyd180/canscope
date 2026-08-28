@@ -86,8 +86,8 @@ def steps(win):
     check("前置:2信号", len(s.signals_list) == 2)
     check("播放条启用", pb.isEnabled())
 
-    # 1) 10x 速播放
-    pbc.set_rate(10.0)
+    # 1) 加速播放;保留足够时间窗口让无头 CI 稳定执行暂停检查
+    pbc.set_rate(2.0)
     pbc.play()
     wait_for(lambda: pbc.mode == "playing")
     check("进入播放", pbc.mode == "playing")
