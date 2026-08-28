@@ -31,7 +31,12 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
       - name: Generate smoke test data
-        run: python scripts/make_test_data.py
+        shell: pwsh
+        run: |
+          python scripts/make_test_data.py
+          if (!(Test-Path -LiteralPath "${{ github.workspace }}\data\test.blf")) { throw "test.blf 未生成" }
+          if (!(Test-Path -LiteralPath "${{ github.workspace }}\data\test.dbc")) { throw "test.dbc 未生成" }
+          Get-Item "${{ github.workspace }}\data\test.blf", "${{ github.workspace }}\data\test.dbc"
       - name: Compatibility check
         run: python scripts/compat_check.py
       - name: Core smoke tests
