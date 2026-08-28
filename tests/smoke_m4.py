@@ -129,7 +129,10 @@ def steps(win):
     # 5) ended 后重播 → 从 0 开始
     pbc.play()
     wait_for(lambda: pbc.mode == "playing")
-    check("重播从0", pbc.current_t() < 2.0, f"(t={pbc.current_t():.2f})")
+    # 10x 播放时 CI 调度延迟可能让 current_t 越过 2s;
+    # _play_t 才是重播是否从起点开始的稳定判据。
+    check("重播从0", pbc._play_t == 0.0 and pbc.current_t() < 4.0,
+          f"(base={pbc._play_t:.2f}, t={pbc.current_t():.2f})")
 
     # 6) 播放中变更信号集 → 自动复位
     s.toggle_signal(291, ch, "CoolantTemp")
