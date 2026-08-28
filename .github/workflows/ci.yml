@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: canscope-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tests:
     name: Tests Python ${{ matrix.python-version }}
