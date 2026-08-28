@@ -12,6 +12,7 @@ jobs:
   tests:
     name: Tests Python ${{ matrix.python-version }}
     runs-on: windows-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -27,22 +28,41 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Compatibility check
         run: python scripts/compat_check.py
-      - name: Core and GUI smoke tests
-        run: |
-          python tests/smoke_core.py
-          python tests/smoke_sync.py
-          python tests/smoke_gui.py
-          python tests/smoke_m3.py
-          python tests/smoke_m4.py
-          python tests/smoke_m5.py
-          python tests/smoke_scope_ops.py
-          python tests/smoke_r1.py
-          python tests/smoke_r2.py
-          python tests/smoke_r3.py
+      - name: Core smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_core.py
+      - name: Sync smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_sync.py
+      - name: GUI smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_gui.py
+      - name: M3 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_m3.py
+      - name: M4 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_m4.py
+      - name: M5 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_m5.py
+      - name: Scope operations smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_scope_ops.py
+      - name: R1 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_r1.py
+      - name: R2 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_r2.py
+      - name: R3 smoke tests
+        timeout-minutes: 5
+        run: python tests/smoke_r3.py
 
   package:
     name: Package Windows EXE
     runs-on: windows-latest
+    timeout-minutes: 30
     needs: tests
     steps:
       - uses: actions/checkout@v4
