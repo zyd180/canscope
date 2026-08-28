@@ -114,6 +114,9 @@ class ScopeStack(QScrollArea):
             plot.renumber(idx)   # 删除中间窗口后保持"示波器 N"连续
             its = groups.get(idx, [])
             plot.set_signals(its)
+            # pyqtgraph 刷新曲线后可能重新计算轴宽,需在动态窗口刷新后再固定。
+            if plot.plot.getAxis("left").width() != 72:
+                plot.plot.getAxis("left").setWidth(72)
             plot.set_xrange(*self._xr)
             self._rebuild_chips(plot, idx, its)
         self._apply_jitter_marks()
