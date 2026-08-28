@@ -124,6 +124,9 @@ python tests/smoke_m5.py          # M5 配置/记忆/映射 21 项
 python tests/smoke_scope_ops.py   # 示波器窗口操作 7 项(含图形泄漏检测)
 python tests/smoke_r1.py          # R1 图表与分析补强 24 项(Y锁/框选统计/minimap/显隐/PNG)
 python tests/smoke_r2.py          # R2 数据互通 21 项(ASC/MF4 往返/片段/Trace 全量/骨架)
+python tests/smoke_r3.py          # R3 诊断/版本信息
+python scripts/benchmark.py       # 解析/解码/负载性能与 Python 内存基准
+python scripts/compat_check.py    # 当前 Python 环境依赖导入检查
 python tests/diag_click.py        # 树点击链路
 python tests/realdata_gui.py      # 真实 449MB 数据 GUI 全流程(手动)
 ```

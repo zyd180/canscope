@@ -16,6 +16,7 @@ from core.decoder import decode_signal
 from core.file_types import ALLOWED_EXTENSIONS, LOG_KINDS, detect_kind
 from gui.palette import alloc_color
 from services import exporters, project_config, stats_service
+from services.diagnostics import record_operation
 from services.stats_service import cycle_stats, signal_stats  # noqa: F401 便捷导出
 from workers.blf_loader import BlfLoadTask, compute_index_and_stats
 from workers.task_runner import TaskRunner
@@ -97,6 +98,7 @@ class AppState(QObject):
         文件类型按内容识别(扩展名不可靠:.log/.txt 可能是 BLF/ASC/DBC;
         R2 起支持 BLF/ASC/MF4 三类日志)。
         """
+        record_operation("打开文件")
         logs, dbcs, rejected = [], [], []
         for p in paths:
             kind = detect_kind(p)
@@ -238,6 +240,7 @@ class AppState(QObject):
 
     def apply_channel_mapping(self, mapping: dict) -> None:
         """配置抽屉保存通道映射:重建树并持久化(不重新解析 BLF)。"""
+        record_operation("应用通道 DBC 映射")
         cleaned = {int(c): p for c, p in mapping.items() if p}
         self._rebuild_channels(cleaned)
         self._save_project(cleaned)
@@ -277,6 +280,7 @@ class AppState(QObject):
 
     def toggle_signal(self, frame_id: int, channel: int, name: str) -> None:
         """点击树中信号:已选中则全部移除,否则解码并添加(优先复用空示波器)。"""
+        record_operation(f"切换信号 CH{channel} {hex(frame_id)} {name}")
         key = f"{frame_id}|{channel}|{name}"
         if any(s.key == key for s in self.signals_list):
             self.remove_signal(key)

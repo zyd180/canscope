@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 from pathlib import Path
-import os
+import sys
 
 from PySide6.QtCore import QEvent, Qt, QSettings, QTimer
 from PySide6.QtGui import QAction, QKeySequence
-from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMainWindow,
-                               QMessageBox, QProgressBar, QSizePolicy,
+from PySide6.QtWidgets import (QDialog, QFileDialog, QHBoxLayout, QLabel,
+                               QMainWindow, QMessageBox, QPushButton, QProgressBar,
+                               QSizePolicy,
                                QSplitter, QTabWidget, QToolBar, QVBoxLayout,
                                QWidget)
 
@@ -20,6 +21,19 @@ from gui.trace_panel import TracePanel
 
 APP_TITLE = "CANScope · CAN 总线分析仪"
 VERSION = "1.0.0"
+
+
+def build_time() -> str:
+    """显示当前运行版本对应的源码或 EXE 修改时间。"""
+    from services.project_config import app_root
+    target = (app_root() / "CANScope.exe" if getattr(sys, "frozen", False)
+              else Path(__file__).resolve().parents[1] / "main.py")
+    try:
+        import datetime
+        return datetime.datetime.fromtimestamp(target.stat().st_mtime).strftime(
+            "%Y-%m-%d %H:%M:%S")
+    except OSError:
+        return "未知"
 
 
 class MainWindow(QMainWindow):
@@ -88,6 +102,10 @@ class MainWindow(QMainWindow):
         act_cfg.triggered.connect(self._open_config)
         tb.addAction(act_cfg)
         self.act_cfg = act_cfg
+
+        act_about = QAction("关于", self)
+        act_about.triggered.connect(self._show_about)
+        tb.addAction(act_about)
 
         from PySide6.QtWidgets import QSizePolicy, QWidget as _W
         spacer = _W()
@@ -276,6 +294,21 @@ class MainWindow(QMainWindow):
         self._sel_save_timer.timeout.connect(self._save_selection)
 
     # ---------------- 配置弹窗 ----------------
+
+    def _show_about(self) -> None:
+        dlg = QDialog(self)
+        dlg.setWindowTitle("关于 CANScope")
+        dlg.setMinimumWidth(360)
+        lay = QVBoxLayout(dlg)
+        label = QLabel(f"<b>{APP_TITLE}</b><br><br>版本: v{VERSION}<br>"
+                       f"构建时间: {build_time()}")
+        label.setTextFormat(Qt.RichText)
+        label.setWordWrap(True)
+        lay.addWidget(label)
+        close = QPushButton("关闭")
+        close.clicked.connect(dlg.accept)
+        lay.addWidget(close, 0, Qt.AlignRight)
+        dlg.exec()
 
     def _toggle_tree(self) -> None:
         """折叠/展开报文树:折叠时右侧界面整体向左扩展。"""

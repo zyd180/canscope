@@ -41,6 +41,9 @@ def _migrate_legacy_settings(config_dir: Path) -> None:
 
 
 def main() -> int:
+    from services.diagnostics import install_exception_hook, record_operation
+    install_exception_hook()
+    record_operation("应用启动")
     app = QApplication(sys.argv)
     app.setApplicationName("CANScope")
     app.setOrganizationName("canscope")
