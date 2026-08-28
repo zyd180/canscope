@@ -1,0 +1,8 @@
+window=1500x900
+central is sp: True
+sp geo=PySide6.QtCore.QRect(0, 48, 1500, 820) sizeHint=PySide6.QtCore.QSize(1491, 917) maxH=378 vPolicy=Policy.Preferred
+central_splitter geo=PySide6.QtCore.QRect(0, 48, 1500, 820) sizes=[267, 14, 1213]
+right geo=PySide6.QtCore.QRect(287, 0, 1213, 820) sizes=[508, 309] vPolicy=Policy.Expanding
+chart_wrap geo=PySide6.QtCore.QRect(0, 0, 1213, 508)
+tabs geo=PySide6.QtCore.QRect(0, 511, 1213, 309)
+tree geo=PySide6.QtCore.QRect(0, 0, 267, 820) visible=True

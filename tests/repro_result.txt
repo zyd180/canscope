@@ -1,0 +1,4 @@
+channelsReady, auto=[(291, 0, 'CoolantTemp'), (291, 0, 'EngineSpeed')]
+signalsChanged n=1
+signalsChanged n=2
+FINAL signals=2

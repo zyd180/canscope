@@ -1,0 +1,5 @@
+channelsReady
+target=True enabled=True
+signals=[('VehicleSpeed', 0)]
+sidebar_rows=1
+saved drawer_check.png

@@ -1,0 +1,4 @@
+表头锚点右缘=230 行锚点右缘=230 偏差=0px
+表头光标右缘=300 行光标右缘=300 偏差=0px
+折叠后: tree_visible=False strip='▶' sizes=[0, 14, 1480]
+展开后: tree_visible=True strip='◀' sizes=[267, 14, 1213]
