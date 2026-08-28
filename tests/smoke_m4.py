@@ -105,6 +105,9 @@ def steps(win):
     check("进度条走动", pb.slider.value() > 0, f"({pb.slider.value()})")
 
     # 3) 暂停
+    if pbc.mode != "playing":
+        pbc.play()
+        wait_for(lambda: pbc.mode == "playing")
     pbc.pause()
     check("暂停", pbc.mode == "paused" and pb.btn_play.text() == "▶")
     t_paused = pbc.current_t()
