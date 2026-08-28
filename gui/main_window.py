@@ -18,9 +18,9 @@ from gui.message_tree import MessageTree
 from gui.scope_stack import ScopeStack
 from gui.sig_stats_panel import SigStatsPanel
 from gui.trace_panel import TracePanel
+from version import VERSION
 
 APP_TITLE = "CANScope · CAN 总线分析仪"
-VERSION = "1.0.0"
 
 
 def build_time() -> str:
@@ -106,6 +106,10 @@ class MainWindow(QMainWindow):
         act_about = QAction("关于", self)
         act_about.triggered.connect(self._show_about)
         tb.addAction(act_about)
+
+        act_help = QAction("快捷键", self)
+        act_help.triggered.connect(self._show_help)
+        tb.addAction(act_help)
 
         from PySide6.QtWidgets import QSizePolicy, QWidget as _W
         spacer = _W()
@@ -302,6 +306,29 @@ class MainWindow(QMainWindow):
         lay = QVBoxLayout(dlg)
         label = QLabel(f"<b>{APP_TITLE}</b><br><br>版本: v{VERSION}<br>"
                        f"构建时间: {build_time()}")
+        label.setTextFormat(Qt.RichText)
+        label.setWordWrap(True)
+        lay.addWidget(label)
+        close = QPushButton("关闭")
+        close.clicked.connect(dlg.accept)
+        lay.addWidget(close, 0, Qt.AlignRight)
+        dlg.exec()
+
+    def _show_help(self) -> None:
+        dlg = QDialog(self)
+        dlg.setWindowTitle("CANScope 快捷键")
+        dlg.setMinimumWidth(430)
+        lay = QVBoxLayout(dlg)
+        label = QLabel(
+            "<b>快捷键与常用操作</b><br><br>"
+            "Ctrl+O　打开日志和 DBC<br>"
+            "滚轮　缩放时间轴<br>"
+            "Shift+滚轮　滚动示波器页面<br>"
+            "左键拖拽　平移时间轴<br>"
+            "Ctrl+左键拖拽　框选区间统计<br>"
+            "Shift+单击　设置或清除测量锚点<br>"
+            "双击绘图区　自动/锁定 Y 轴<br><br>"
+            "更多操作请参阅 docs/USER_GUIDE.md。")
         label.setTextFormat(Qt.RichText)
         label.setWordWrap(True)
         lay.addWidget(label)

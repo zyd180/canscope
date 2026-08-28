@@ -3,6 +3,10 @@
 $ErrorActionPreference = "Stop"
 Set-Location (Split-Path $PSScriptRoot -Parent)
 
+$version = python -c "from version import VERSION; print(VERSION)"
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($version)) { throw "读取版本失败" }
+Write-Host "构建 CANScope v$version"
+
 pyinstaller --noconfirm --clean `
     --onedir --windowed `
     --name CANScope `
@@ -25,5 +29,5 @@ foreach ($f in @("data\test.blf", "data\test.dbc")) {
 }
 Copy-Item "data\test.blf", "data\test.dbc" -Destination $distData -Force
 
-Write-Host "`n[OK] dist\CANScope\CANScope.exe" -ForegroundColor Green
+Write-Host "`n[OK] dist\CANScope\CANScope.exe (v$version)" -ForegroundColor Green
 Write-Host "冒烟验证: dist\CANScope\CANScope.exe --smoke"

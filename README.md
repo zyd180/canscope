@@ -127,6 +127,7 @@ python tests/smoke_r2.py          # R2 数据互通 21 项(ASC/MF4 往返/片段
 python tests/smoke_r3.py          # R3 诊断/版本信息
 python scripts/benchmark.py       # 解析/解码/负载性能与 Python 内存基准
 python scripts/compat_check.py    # 当前 Python 环境依赖导入检查
+python scripts/verify_package.py  # 检查 PyInstaller 产物必需文件
 python tests/diag_click.py        # 树点击链路
 python tests/realdata_gui.py      # 真实 449MB 数据 GUI 全流程(手动)
 ```
@@ -138,7 +139,10 @@ GUI 测试默认 offscreen 无头运行,也可 `$env:QT_QPA_PLATFORM='windows'` 
 ```powershell
 powershell -File scripts/build.ps1     # 产出 dist/CANScope/
 dist\CANScope\CANScope.exe --smoke   # 打包冒烟(自动验证并截图,结果写 smoke_log.txt)
+# 也可直接双击 build.bat 一键打包
 ```
+
+用户手册见 [docs/USER_GUIDE.md](docs/USER_GUIDE.md)，程序内“快捷键”按钮可打开速查页。
 
 ## 技术栈
 

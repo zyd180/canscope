@@ -1,0 +1,76 @@
+name: CANScope CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tests:
+    name: Tests Python ${{ matrix.python-version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compatibility check
+        run: python scripts/compat_check.py
+      - name: Core and GUI smoke tests
+        run: |
+          python tests/smoke_core.py
+          python tests/smoke_sync.py
+          python tests/smoke_gui.py
+          python tests/smoke_m3.py
+          python tests/smoke_m4.py
+          python tests/smoke_m5.py
+          python tests/smoke_scope_ops.py
+          python tests/smoke_r1.py
+          python tests/smoke_r2.py
+          python tests/smoke_r3.py
+
+  package:
+    name: Package Windows EXE
+    runs-on: windows-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt pyinstaller
+      - name: Build
+        shell: pwsh
+        run: ./scripts/build.ps1
+      - name: Verify package files
+        run: python scripts/verify_package.py dist/CANScope
+      - name: Run packaged smoke test
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: .\dist\CANScope\CANScope.exe --smoke
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: CANScope-${{ github.sha }}
+          path: dist/CANScope
+      - name: Create release archive
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: Compress-Archive -Path dist/CANScope -DestinationPath CANScope-${{ github.ref_name }}.zip
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: CANScope-${{ github.ref_name }}.zip

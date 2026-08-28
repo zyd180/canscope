@@ -85,7 +85,11 @@ ASC/MF4 样例纳入 smoke_sync 门控矩阵。
 - 稳定性:人为注入异常必有 `crash.log`,后台任务异常不导致 GUI 退出;
 - 兼容性:Python 3.10/3.11 与目标 PySide6 版本的核心冒烟和 GUI 冒烟通过。
 
-### R4 发布体系
+### R4 发布体系 ✅(2026-08-29 完成实现)
+
+> 已补齐统一版本定义、程序内快捷键帮助、[用户手册](docs/USER_GUIDE.md)、
+> GitHub Actions 多 Python 版本回归、Windows 打包、产物检查和 EXE 冒烟验证。
+> 发布工作流位于 `.github/workflows/ci.yml`，打包逻辑仍统一由 `scripts/build.ps1` 负责。
 
 | # | 功能 | 说明 |
 |---|---|---|
