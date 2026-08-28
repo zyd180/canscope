@@ -93,12 +93,13 @@ ASC/MF4 样例纳入 smoke_sync 门控矩阵。
 
 | # | 功能 | 说明 |
 |---|---|---|
-| 4.1 | GitHub Actions CI | windows-latest:冒烟套件(offscreen)→ PyInstaller 打包 → tag 触发 Release 上传产物 |
+| 4.1 | GitHub Actions CI | windows-latest:冒烟套件(offscreen)→ PyInstaller 打包 →按 `version.py` 自动创建版本 Tag 并上传 Release |
 | 4.2 | 版本单点定义 | VERSION 在一处定义(main_window/构建脚本/关于页共用;构建脚本注入 spec) |
 | 4.3 | 用户手册 | 截图型使用文档(操作说明表扩成图文)+ 快捷键速查页(Help 弹窗) |
 | 4.4 | 打包产物验证 | CI 启动 `CANScope.exe --smoke`,检查退出码、日志、截图及必需的 `data/` 文件,失败则不发布 |
 
-**验收**:打 tag 出正式包,README 徽章挂 CI 状态;EXE 冒烟和产物完整性检查通过;全程无人工桌面操作。
+**验收**:合并到 `master` 后按版本号自动创建 Tag 并发布正式包,README 徽章挂 CI 状态;
+EXE 冒烟和产物完整性检查通过;全程无人工桌面操作。
 
 ---
 

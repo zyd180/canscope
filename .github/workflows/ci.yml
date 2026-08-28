@@ -93,17 +93,44 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: .\dist\CANScope\CANScope.exe --smoke
+      - name: Read version
+        id: version
+        shell: pwsh
+        run: |
+          $version = python -c "from version import VERSION; print(VERSION)"
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+      - name: Create version tag
+        id: tag
+        if: github.ref == 'refs/heads/master'
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.version.outputs.tag }}"
+          git fetch --tags origin
+          $existing = git ls-remote --tags origin "refs/tags/$tag"
+          if ($LASTEXITCODE -eq 0 -and $existing) {
+            "release=false" >> $env:GITHUB_OUTPUT
+            Write-Host "Tag $tag 已存在,不重复发布"
+          } else {
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag $tag
+            git push origin $tag
+            "release=true" >> $env:GITHUB_OUTPUT
+            Write-Host "已创建并推送 $tag"
+          }
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
           name: CANScope-${{ github.sha }}
           path: dist/CANScope
       - name: Create release archive
-        if: startsWith(github.ref, 'refs/tags/')
+        if: steps.tag.outputs.release == 'true' || startsWith(github.ref, 'refs/tags/')
         shell: pwsh
-        run: Compress-Archive -Path dist/CANScope -DestinationPath CANScope-${{ github.ref_name }}.zip
+        run: Compress-Archive -Path dist/CANScope -DestinationPath CANScope-${{ steps.version.outputs.tag }}.zip
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: steps.tag.outputs.release == 'true' || startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: CANScope-${{ github.ref_name }}.zip
+          tag_name: ${{ steps.version.outputs.tag }}
+          files: CANScope-${{ steps.version.outputs.tag }}.zip

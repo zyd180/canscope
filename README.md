@@ -143,6 +143,7 @@ dist\CANScope\CANScope.exe --smoke   # 打包冒烟(自动验证并截图,结果
 ```
 
 用户手册见 [docs/USER_GUIDE.md](docs/USER_GUIDE.md)，程序内“快捷键”按钮可打开速查页。
+合并到 `master` 后，CI 会按 `version.py` 自动创建版本 Tag 并发布 Release。
 
 ## 技术栈
 
