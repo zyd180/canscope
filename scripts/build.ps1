@@ -7,13 +7,18 @@ $version = python -c "from version import VERSION; print(VERSION)"
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($version)) { throw "读取版本失败" }
 Write-Host "构建 CANScope v$version"
 
-pyinstaller --noconfirm --clean `
-    --onedir --windowed `
-    --name CANScope `
-    --icon assets/icon.ico `
-    --hidden-import can.io.blf `
-    --hidden-import cantools.database `
-    main.py
+$pyinstallerArgs = @(
+    "--noconfirm", "--clean", "--onedir", "--windowed",
+    "--name", "CANScope",
+    "--hidden-import", "can.io.blf",
+    "--hidden-import", "cantools.database"
+)
+if (Test-Path -LiteralPath "assets\icon.ico") {
+    $pyinstallerArgs += @("--icon", "assets\icon.ico")
+} else {
+    Write-Host "未找到 assets\icon.ico,使用默认图标"
+}
+pyinstaller @pyinstallerArgs main.py
 
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller 失败" }
 
